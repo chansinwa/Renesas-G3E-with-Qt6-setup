@@ -54,14 +54,19 @@ also download Qt6 BSP RTK0EF0224Z00001ZJ\_v4.0.0.1 ([RZ MPU Qt Package | Renesas
 4.  Then run, from \~/rzg3e\_bsp\_v1.0.0:  
      1\. Unpack Qt6 recipes for building :
 
-| unzip ./RTK0EF0224Z00001ZJ\_v4.0.0.1.zip tar zxvf ./RTK0EF0224Z00001ZJ\_v4.0.0.1/rzg\_bsp\_qt6.8.3\_v4.0.0.1.tar.gz |
+| unzip ./RTK0EF0224Z00001ZJ\_v4.0.0.1.zip |
+| tar zxvf ./RTK0EF0224Z00001ZJ\_v4.0.0.1/rzg\_bsp\_qt6.8.3\_v4.0.0.1.tar.gz |
 | :---- |
 
    
 
      2\. (Optional) Unpack graphics/codec layers:
 
-| unzip ./RTK0EF0045Z14001ZJ-v4.2.0.2\_rzg\_EN.zip tar zxvf ./RTK0EF0045Z14001ZJ-v4.2.0.2\_rzg\_EN/meta-rz-features\_graphics\_v4.2.0.2.tar.gz unzip ./RTK0EF0207Z00001ZJ-v4.4.0.0\_rzg3e\_EN.zip tar zxvf ./RTK0EF0207Z00001ZJ-v4.4.0.0\_rzg3e\_EN/meta-rz-features\_codec\_v4[.4.0.0.tar.gz](http://.4.0.0.tar.gz) ~~unzip ./RTK0EF0193Z00002ZJ\_v4.0.0.0.zip tar zxvf ./RTK0EF0193Z00002ZJ\_v4.0.0.0/rzg\_bsp\_chromium132\_v4.0.0.0.tar.gz~~ |
+| unzip ./RTK0EF0045Z14001ZJ-v4.2.0.2\_rzg\_EN.zip |
+| tar zxvf ./RTK0EF0045Z14001ZJ-v4.2.0.2\_rzg\_EN/meta-rz-features\_graphics\_v4.2.0.2.tar.gz |
+| unzip ./RTK0EF0207Z00001ZJ-v4.4.0.0\_rzg3e\_EN.zip |
+| tar zxvf ./RTK0EF0207Z00001ZJ-v4.4.0.0\_rzg3e\_EN/meta-rz-features\_codec\_v4[.4.0.0.tar.gz](http://.4.0.0.tar.gz) |
+| ~~unzip ./RTK0EF0193Z00002ZJ\_v4.0.0.0.zip tar zxvf ./RTK0EF0193Z00002ZJ\_v4.0.0.0/rzg\_bsp\_chromium132\_v4.0.0.0.tar.gz~~ |
 | :---- |
 
    After that, you should see meta-qt6 and meta-rz-qt6 alongside poky/meta-renesas.
@@ -80,7 +85,15 @@ also download Qt6 BSP RTK0EF0224Z00001ZJ\_v4.0.0.1 ([RZ MPU Qt Package | Renesas
 5. Add required layers  
    From \~/rzg3e\_bsp\_v1.0.0/build:
 
-| bitbake-layers add-layer ../meta-qt6 bitbake-layers add-layer ../meta-rz-qt6 bitbake-layers add-layer ../meta-rz-features/meta-rz-graphics    bitbake-layers add-layer ../meta-rz-features/meta-rz-codecs bitbake-layers add-layer ../meta-clang bitbake-layers add-layer ../meta-lts-mixins \# bitbake-layers add-layer ../meta-browser/meta-chromium bitbake-layers add-layer ../meta-openembedded/meta-networking \# bitbake-layers add-layer ../meta-browser-hwdecode |
+| bitbake-layers add-layer ../meta-qt6 |
+| bitbake-layers add-layer ../meta-rz-qt6 |
+| bitbake-layers add-layer ../meta-rz-features/meta-rz-graphics |
+| bitbake-layers add-layer ../meta-rz-features/meta-rz-codecs |
+| bitbake-layers add-layer ../meta-clang |
+| bitbake-layers add-layer ../meta-lts-mixins |
+| \# bitbake-layers add-layer ../meta-browser/meta-chromium |
+| bitbake-layers add-layer ../meta-openembedded/meta-networking |
+| \# bitbake-layers add-layer ../meta-browser-hwdecode |
 | :---- |
 
    
@@ -257,12 +270,17 @@ use \-j2 due to only 2 cores for our poor git server, you may check yours with l
 Method 2: make a custom\_toolchain.cmake file instead of typing \-DQT…. each time(only setup once, and for future run, just type cmake..)  
 In project directory, create a custom\_toolchain.cmake file:
 
-| gitadmin@DEIL-HK-GIT01:\~/rzg3e\_bsp\_v1.0.0/sita\_work/Qt\_Wega\_HMI$ sudo touch custom\_toolchain.cmake gitadmin@DEIL-HK-GIT01:\~/rzg3e\_bsp\_v1.0.0/sita\_work/Qt\_Wega\_HMI$ sudo vim custom\_toolchain.cmake |
+| gitadmin@DEIL-HK-GIT01:\~/rzg3e\_bsp\_v1.0.0/sita\_work/Qt\_Wega\_HMI$ sudo touch custom\_toolchain.cmake |
+| gitadmin@DEIL-HK-GIT01:\~/rzg3e\_bsp\_v1.0.0/sita\_work/Qt\_Wega\_HMI$ sudo vim custom\_toolchain.cmake |
 | :---- |
 
 add to this toolchain cmake file:
 
-| \# Wrap SDK toolchain include($ENV{CMAKE\_TOOLCHAIN\_FILE}) \# Qt6 paths (these get cached) set(Qt6\_DIR $ENV{OECORE\_TARGET\_SYSROOT}/usr/lib/cmake/Qt6) set(QT\_HOST\_PATH $ENV{OECORE\_NATIVE\_SYSROOT}/usr) |
+| \# Wrap SDK toolchain |
+| include($ENV{CMAKE\_TOOLCHAIN\_FILE}) |
+| \# Qt6 paths (these get cached) |
+| set(Qt6\_DIR $ENV{OECORE\_TARGET\_SYSROOT}/usr/lib/cmake/Qt6) |
+| set(QT\_HOST\_PATH $ENV{OECORE\_NATIVE\_SYSROOT}/usr) |
 | :---- |
 
 don’t forget to save :wq
